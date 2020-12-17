@@ -24,7 +24,7 @@ The [USFSMAX hardware](https://hackaday.io/project/160283-max32660-motion-co-pro
 ## USFSMAX Performance
 Over the period of about two years, I have made a great deal of progress in terms of both the fusion and sensor calibration methods. These advances have been incorporated into the USFSMAX motion coprocessor hardware to provide results that are [significantly better than those from the Sentral](https://cdn.hackaday.io/images/7698711574962560703.jpg). ***Calibration and characterization of the first four prototype USFSMAX units showed [RMS heading error ranging between 0.25 and 0.35deg](https://hackaday.io/project/160283-max32660-motion-co-processor/log/172109-unit-to-unit-variation-and-on-board-residual-hard-iron-error-correction).*** 
 
-![alt text](https://user-images.githubusercontent.com/5760946/81322483-e7d89f80-9048-11ea-9747-61e52e2d114f.png)
+![alt text](https://user-images.githubusercontent.com/5760946/102422856-82746600-3fbc-11eb-81e3-9b4ca88f852d.jpg)
 
 Furthermore, the sinusoidal character of the heading error has been largely eiminated, indicating that the vast majority of systematic sensor errors have been effectively corrected. This level of accuracy can be enabling for many user applications in a smaller form factor and at a fraction of the price of [other AHRS solutions](https://www.xsens.com/inertial-sensor-modules).
 
