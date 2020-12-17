@@ -1,15 +1,9 @@
 # USFSMAX MMC5983 Motion Coprocessor Module
 
 ## Introduction
-This repository provides background information and practical code examples for implementing Tlera Corporation's follow-on product to the [USFSMAX motion coprocessor](https://www.tindie.com/products/onehorse/max32660-motion-co-processor/), the [USFSMAX module and carrier](https://www.tindie.com/products/onehorse/usfsmax-module-and-carrier/).
-
-Many customers have found the USFS to be a good solution for their applications. However, there are two fundamental limitations to the Sentral sensor fusion solution:
-* The ~2deg RMS residual heading error level is dominated by uncorrected (sinusoidal) [systematic sensor errors](https://hackaday.com/wp-content/uploads/2019/03/hackaday_journal-gregorytomasch_kriswiner-heading_accuracy_using_mems_sensors.pdf)
-* The SpacePoint adaptive algorithm is "Always on". In the case of external magnetic interference, the algorithm can adapt to local corruption of the geomagnetic field... Potentially giving bad heading results that can persist for several minutes after the magnetic interference has been resolved
-
-Closer examination of the Sentral's residual heading error showed it to be remarkably stable as well as systematic. These facts convinced me that an improved sensor calibration method and user control over any adaptive elements in the fusion algorithm would be key areas to improve beyond the ~2deg RMS heading error level provided by the Sentral. 
-
-These were the primary motivating factors behind development of the ["USFSMAX" motion coprocessor](https://www.tindie.com/products/onehorse/max32660-motion-co-processor/), documented in detail on [hackaday.io](https://hackaday.io/project/160283-max32660-motion-co-processor). The actual coprocessor is Maxim Integrated's [MAX32660 Cortex M4F microcontroller](https://www.maximintegrated.com/en/products/microcontrollers/MAX32660.html). The MAX32660 is paired with ST Micro's [LSM6DSM accel/gyro](https://www.st.com/en/mems-and-sensors/lsm6dsm.html), [LIS2MDL magnetometer](https://www.st.com/en/mems-and-sensors/lis2mdl.html) and [LPS22HB barometer](https://www.st.com/en/mems-and-sensors/lps22hb.html) all of which are "Best in breed" contenders among the various MEMS sensors currently available.
+This repository provides background information and practical code examples for implementing Tlera Corporation's follow-on product to the [USFSMAX motion coprocessor](https://www.tindie.com/products/onehorse/max32660-motion-co-processor/), the [USFSMAX module and carrier](https://www.tindie.com/products/onehorse/usfsmax-module-and-carrier/). In the process of introducing the USFSMAX into the marketplace, we learned several areas for improvement in the original design:
+* The validity of the bench calibration can degrade from board-level strain
+* This is typically encountered when making solder connections to the plated through-holes on the USFSMAX PCB
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102443217-0b9a9580-3fdb-11eb-9c88-19f36b8adc16.jpg)
 
