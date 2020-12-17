@@ -13,7 +13,7 @@ These were the primary motivating factors behind development of the ["USFSMAX" m
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102422562-eb0f1300-3fbb-11eb-8ed8-78e7b8a6ae21.JPG)
 
-![alt text](https://user-images.githubusercontent.com/5760946/102424486-1267df00-3fc0-11eb-8271-66d9980b3e99.jpg)
+![alt text](https://user-images.githubusercontent.com/5760946/102438031-6a0e4680-3fd0-11eb-9ebd-0b2a075cc67a.jpg)
 
 The [USFSMAX hardware](https://hackaday.io/project/160283-max32660-motion-co-processor/log/171113-final-hardware-design) is an excellent platform for enhanced sensor calibration and fusion algorithm development:
 * Lots of horsepower - 96MHz Cortex M4F CPU
