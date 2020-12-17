@@ -22,9 +22,9 @@ This interconnect information is for operating the [USFSMAX motion coprocessor b
 
 This sketch was tested for both the Teensy 3.2 and 3.6 development boards, both of which are shown below in piggyback configuration.
 
-![alt text](https://user-images.githubusercontent.com/5760946/80746808-52349180-8ad7-11ea-942d-589a6b66462d.JPG)
+![alt text](https://user-images.githubusercontent.com/5760946/102422593-f9f5c580-3fbb-11eb-9af3-e8278ed22edc.JPG)
 
-![alt text](https://user-images.githubusercontent.com/5760946/80746802-51036480-8ad7-11ea-8b71-cef26d159655.JPG)
+![alt text](https://user-images.githubusercontent.com/5760946/102422583-f5c9a800-3fbb-11eb-9aa0-f175c304aedb.JPG)
 
 ## Building/Uploading/Running the Test Sketch
 
