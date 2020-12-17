@@ -2,8 +2,9 @@
 
 ## Introduction
 This repository provides background information and practical code examples for implementing Tlera Corporation's follow-on product to the [USFSMAX motion coprocessor](https://www.tindie.com/products/onehorse/max32660-motion-co-processor/), the [USFSMAX module and carrier](https://www.tindie.com/products/onehorse/usfsmax-module-and-carrier/). In the process of introducing the USFSMAX into the marketplace, we learned several areas for improvement in the original design:
-* The validity of the bench calibration can degrade from board-level strain
+* The validity of the bench calibration can degrade from board-level strain impacting the response characteristics of the individual sensors
 * This is typically encountered when making solder connections to the plated through-holes on the USFSMAX PCB
+* The form factor of the original USFSMAX could stand further optimization
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102443217-0b9a9580-3fdb-11eb-9c88-19f36b8adc16.jpg)
 
