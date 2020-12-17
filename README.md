@@ -8,6 +8,7 @@ This repository provides background information and practical code examples for 
 * The form factor of the original USFSMAX could stand further optimization, especially to facilitate incorporation into OEM products
 
 Optimizatin efforts in these areas resulted in the USFSMAX module and carrier product shown below. The module has been shrunk to a 1/2" x 1/2" PCB and connects to the carrier board using two Molex micro mezzanine connectors.
+
 ![alt text](https://user-images.githubusercontent.com/5760946/102443217-0b9a9580-3fdb-11eb-9c88-19f36b8adc16.jpg)
 
 I should mention here that the orientation of the USFSMAX module on the test object or vehicle is important. The figure below shows a USFSMAX module and carrier assembly and with the o
