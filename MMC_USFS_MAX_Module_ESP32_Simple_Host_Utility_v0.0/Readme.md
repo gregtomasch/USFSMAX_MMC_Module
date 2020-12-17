@@ -20,7 +20,7 @@ This interconnect information is for operating the [USFSMAX motion coprocessor b
 |   SDA     |       16     |
 |   INT     |       27     |
 
-![alt text](https://user-images.githubusercontent.com/5760946/80746815-5365be80-8ad7-11ea-8e1b-241ee2c26463.JPG)
+![alt text](https://user-images.githubusercontent.com/5760946/102422599-feba7980-3fbb-11eb-8b88-d18c2cdde258.JPG)
 
 ## Building/Uploading/Running the Test Sketch
 
