@@ -20,7 +20,7 @@ This interconnect information is for operating the [USFSMAX motion coprocessor b
 |   SDA     |    4(SDA2)  |
 |   INT     |      A3     |
 
-![alt text](https://user-images.githubusercontent.com/5760946/80746812-52cd2800-8ad7-11ea-9166-cb2111811f41.JPG)
+![alt text](https://user-images.githubusercontent.com/5760946/102422567-eea29a00-3fbb-11eb-8a9e-fae31dcb2a69.JPG)
 
 The USFSMAX board can also be used with either of the other two I2C ports and a different DRDY interrupt but the "INT_PIN" and "SENSOR_0_WIRE_INSTANCE" definitions in the "config.h" tab would need updating to reflect these changes.
 
