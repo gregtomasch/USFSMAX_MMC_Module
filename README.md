@@ -29,7 +29,9 @@ The improvements in resolution and noise deliverd by the MMC5983 do indeed trans
 
 Although the data set is small, we can clearly see the total amplitudes of the MMC5983-based heading error curves are significantly smaller and the data sets are much less noisy than the LIS2MDL-based curves
 
-## Dynamic Hard Iron (DHI) Corrector
+## USFSMAX Firmware Updates/Changes
+
+### Dynamic Hard Iron (DHI) Corrector
 The DHI corrector programmed into the USFSMAX's firmware is adaptive, similar in nature of the Sentral's SpacePoint<sup>TM</sup> algorithm but with some key differences:
 1. The DHI corrector can be enabled or disabled at startup by user command from the host MCU
 2. If there is a valid DHI correction in the USFSMAX's EEPROM, it is loaded and used at startup if the DHI corrector is enabled
