@@ -16,7 +16,7 @@ I should mention here that the orientation of the USFSMAX module on the test obj
 ![alt text](https://user-images.githubusercontent.com/5760946/102438031-6a0e4680-3fd0-11eb-9ebd-0b2a075cc67a.jpg)
 
 
-## USFSMAX Performance
+## MMC5983-Based USFSMAX Performance
 The [USFSMAX hardware](https://hackaday.io/project/160283-max32660-motion-co-processor/log/171113-final-hardware-design) is an excellent platform for enhanced sensor calibration and fusion algorithm development, as [discussed earlier](https://github.com/gregtomasch/USFSMAX). This variant of the USFSMAX product uses the [MMC5983 magnetometer](https://www.mouser.com/datasheet/2/821/Memsic_09102019_MMC5983MA_Datasheet_Rev_A-1635338.pdf). It is an [anisotropic magnetoresistance (AMR) sensor](https://www.allaboutcircuits.com/news/amr-current-sensor-roundup/) like the [ST Microelectronics LIS2MDL](https://www.st.com/resource/en/datasheet/lis2mdl.pdf) but with several key differences:
 * Dynamic range better-matched to measuring the geomagnetic field (+/-8G versus +/-50G)
 * Greatly improved resolution (18bit, 16G range versus 16bit, 100G range)
@@ -30,9 +30,16 @@ The improvements in resolution and noise deliverd by the MMC5983 do indeed trans
 Although the data set is small, we can clearly see the total amplitudes of the MMC5983-based heading error curves are significantly smaller and the data sets are much less noisy than the LIS2MDL-based curves
 
 ## USFSMAX Firmware Updates/Changes
+The behavior of the new USFSMAX module is quite similar to the original product but new features have been added and existing features have been refined. These include:
+* Dynamic hard iron correctors 
+* Gyroscope bias offset calibration
+* User-selectable USFSMAX I2C slave address selection
+* USFSMAX deep sleep mode and wake-up
 
-### Dynamic Hard Iron (DHI) Corrector
-The DHI corrector programmed into the USFSMAX's firmware is adaptive, similar in nature of the Sentral's SpacePoint<sup>TM</sup> algorithm but with some key differences:
+The following sections will present relevant information for each of these general areas.
+
+### Dynamic Hard Iron (DHI) Correctors
+The DHI correctors are extremely similar to those of the original USFSMAX product but are deployed slightly differently after receiving valuable user input. ***Please read this section carefully to avoid unanticipated behavior from the USFSMAX module***
 1. The DHI corrector can be enabled or disabled at startup by user command from the host MCU
 2. If there is a valid DHI correction in the USFSMAX's EEPROM, it is loaded and used at startup if the DHI corrector is enabled
 3. The DHI corrector starts collecting data at startup/reset and then stops once the new hard iron correction estimate is complete
