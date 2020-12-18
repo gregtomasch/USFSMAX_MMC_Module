@@ -11,7 +11,7 @@ Optimization efforts in these areas resulted in the USFSMAX module and carrier p
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102443217-0b9a9580-3fdb-11eb-9c88-19f36b8adc16.jpg)
 
-I should mention here that the orientation of the USFSMAX module on the test object or vehicle is important. The figure below shows a USFSMAX module and carrier assembly with the world coordinate system properly oriented. The USFSMAX conforms to the ["East-North-Up" (ENU)](https://en.wikipedia.org/wiki/Local_tangent_plane_coordinates) sensor coordination system convention. When installed on the test object/vehicle, the component side of the USFSMAX module should be facing up and the "Y" axis should point in the dirrection of travel (forward). ***It is not recommended to install the USFSMAX module with the sensor-side of the board pointing downward***
+I should mention here that the orientation of the USFSMAX module on the test object or vehicle is important. The figure below shows a USFSMAX module and carrier assembly with the world coordinate system properly oriented. The USFSMAX conforms to the ["East-North-Up" (ENU)](https://en.wikipedia.org/wiki/Local_tangent_plane_coordinates) sensor coordination system convention. When installed on the test object/vehicle, the component side of the USFSMAX module should be facing up and the "Y" axis should point in the dirrection of travel (forward). ***It is not recommended to install the USFSMAX module with the sensor-side of the board pointing downward.***
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102438031-6a0e4680-3fd0-11eb-9ebd-0b2a075cc67a.jpg)
 
@@ -53,7 +53,34 @@ The DHI correctors are quite similar to those of the original USFSMAX product bu
 
 There are actually two user-selectable versions of the DHI corrector available: 3-D and 2-D. They are both capable of yielding excellent hard iron correction offset estimates but are intended for different use cases. If the test object to which the USFSMAX is attached is small/light and can easily be tumbled in 3-Space, the 3-D corrector is the best choice. If the test object is unwieldy or its motion is largely constrained to the X-Y (horizontal) plane the 2-D corrector may be a better choice. Both correctors collect a pre-determined number of data points at enforced spatial separation before calculating the final correction estimate. When the estimate is complete, the hard iron corrector status bit in the calibration status register toggles true (0->128) and the R-squared value populates the appropriate data registers. The DHI corrector version is chosen by user command from the host MCU (defined in the "config.h" tab of the example sketches in this repository). To get the best hard iron correction estimate:
 * 3-D corrector: Tumble the USFSMAX (attached to the test object) in 3-Space trying to sample all possible orientations. Training should take ~60-90s. If done properly, R-square >= 0.98 is quite normal
-* 2-D corrector: Rotate the USFSMAX (attached to the test object) in the X-Y (horizontal) plane. The 2D corrector algorithm has been updated correct for tilt if data points are within +/-10deg of level. For larger tilts, data are rejected. Training should complete in ~20 revolutionds in the X-Y plane. If done properly, R-square >= 0.98 is quite normal
+* 2-D corrector: Rotate the USFSMAX (attached to the test object) in the X-Y (horizontal) plane. The 2D corrector algorithm has been updated correct for tilt if data points are within +/-10deg of level. For larger tilts, data are rejected. Training should complete in ~20 revolutions in the X-Y plane. If done properly, R-square >= 0.98 is quite normal
+* ***Note that the host MCU must upload the local geomagnetic constants to the USFSMAX at startup for the 2D corrector to work properly
+
+#### Magnetic Constants
+Your local geomagnetic constants are necessary to achieve the best heading accuracy. The constants in question are:
+* Vertical field strength (M_V)
+* Horizontal field strength (M_H)
+* Magnetic declination (MAG_DECLINATION)
+
+These constants are available from [online calculators](https://www.ngdc.noaa.gov/geomag/calculators/magcalc.shtml?#igrfwmm) for your latitude and longitude. Once your geomagnetic constants have been looked up:
+* Define an entry for your location in the "Magnetic Constantants" section of the "config.h" tab
+
+  Example:
+  
+      #define SUNNYVALE_CA_USA
+  
+* Define a new magnetic constants block in the "Magnetic Constants" section of the "def.h" tab
+
+  Example:
+  
+      #ifdef SUNNYVALE_CA_USA
+          #define M_V                                   41.8128f
+          #define M_H                                   23.2519f
+          #define MAG_DECLINIATION                      13.2197f
+      #endif
+  
+* Comment out all location definitions in the "Magnetic Constants" section of the "config.h" tab except for your own
+
 
 ## Example Host MCU Sketches
 This repository contains example host MCU Arduino sketches to demonstrate basic use of the USFSMAX motion coprocessor.
@@ -90,28 +117,3 @@ If the 2-D DHI corrector is selected and active, the basic procedure and serial 
 **The I2C slave address of the USFSMAX is currently set to 0x57.** There are plans to make the I2C slave address user-selectable and this feature should be available soon. An important aspect of the USFSMAX's I2C slave bus is that there is always a finite delay between when the host MCU requests to read data and when that data is available to be read. Consequently, the USFSMAX will work best with host MCU's that support [I2C clock stretching](https://www.i2c-bus.org/clock-stretching/).
 
 It should be noted that the USFSMAX data registers are set up for efficient I2C data transfer by "Burst reading". That is, a starting data register is specified in the I2C transaction and additional data registers are read sequentially for the total number of bytes specified in the transaction. To improve overall I2C read request response time to the host MCU, not all data registers can be the starting register of an I2C read transaction. Data registers that are directly addressable at the beginning of a read transaction are highlighted in yellow in the register map. So, for example, if a user wanted to read just the two Y-axis gyroscope sensor data bytes from registers 0x07 and 0x08, that is not supported. Instead, the read transaction would begin at register 0x05 and be four bytes long to include the two Y-axis gyroscope data bytes desired.
-
-### Magnetic Constants
-Your local geomagnetic constants are necessary to achieve the best heading accuracy. The constants in question are:
-* Vertical field strength (M_V)
-* Horizontal field strength (M_H)
-* Magnetic declination (MAG_DECLINATION)
-
-These constants are available from [online calculators](https://www.ngdc.noaa.gov/geomag/calculators/magcalc.shtml?#igrfwmm) for your latitude and longitude. Once your geomagnetic constants have been looked up:
-* Define an entry for your location in the "Magnetic Constantants" section of the "config.h" tab
-
-  Example:
-  
-      #define SUNNYVALE_CA_USA
-  
-* Define a new magnetic constants block in the "Magnetic Constants" section of the "def.h" tab
-
-  Example:
-  
-      #ifdef SUNNYVALE_CA_USA
-          #define M_V                                   41.8128f
-          #define M_H                                   23.2519f
-          #define MAG_DECLINIATION                      13.2197f
-      #endif
-  
-* Comment out all location definitions in the "Magnetic Constants" section of the "config.h" tab except for your own
