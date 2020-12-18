@@ -7,7 +7,7 @@ This repository provides background information and practical code examples for 
 * The LIS2MDL magnetometer is sufficiently noisy to cause the indicated heading to fluctuate +/- ~0.2deg. Perhaps there is a lower noise magnetometer available?
 * The form factor of the original USFSMAX could stand further optimization, especially to facilitate incorporation into OEM products
 
-Optimizatin efforts in these areas resulted in the USFSMAX module and carrier product shown below. The module has been shrunk to a 1/2" x 1/2" PCB and connects to the carrier board using two Molex micro mezzanine connectors.
+Optimization efforts in these areas resulted in the USFSMAX module and carrier product shown below. The module has been shrunk to a 1/2" x 1/2" PCB and connects to the carrier board using two Molex micro mezzanine connectors. The connector strategy has the inherent advantage of providing both mechanical and thermal isolation of the USFSMAX module from the carrier or motherboard. As a practical matter, the module can be removed from the carrier board so it can be soldered without the risk of compromizing the factory bench calibration. Furthermore, OEM products can developed with mating Molex mezzanine connectors so that a pre-calibrated USFSMAX module can simply snapped into place to complete assembly.
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102443217-0b9a9580-3fdb-11eb-9c88-19f36b8adc16.jpg)
 
