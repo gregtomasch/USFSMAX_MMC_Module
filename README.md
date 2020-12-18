@@ -87,7 +87,7 @@ The DHI correction function is activated by defining "ENABLE_DHI_CORRECTOR" as "
 The original version of the USFSMAX automatically performed gyroscope calibration at startup. The gyroscope biases need to be measured when the USFSMAX is truly at rest. Several users have pointed out that this isn't always the case at startup, depending on the test object/vehicle. Now the gyroscope calibration is done only in response to a command from the host MCU so that the calibration conditions can be guaranteed. All of the host MCU sketches in this repository show how to handle this in the host MCU startup sequence.
 
 ### Changing the USFSMAX I2C Slave Address
-The default I2C slave address of the USFSMAX is 0x57. In some cases, it may be desirable to have more than one USFSMAX module on the same I2C bus. There can also be possible address conflicts with other I2C devices. Now the USFSMAX I2C address can be changed using the USFSMAX reset pin and an I2C command. The code snippet below shows how this is done:
+The default I2C slave address of the USFSMAX is 0x57. In some cases, it may be desirable to have more than one USFSMAX module on the same I2C bus. There can also be possible address conflicts with other I2C devices. The firmware has been updated to support changing the slave address using the USFSMAX reset pin and an I2C command. The code snippet below shows how to configure the slave address of the first of two USFSMAX modules on the I2C bus so it doesn't interfere the second USFS module on the same I2C bus:
 ```
 #include "I2Cdev.h"
 #include "USFSMAX.h"
@@ -146,7 +146,7 @@ void setup()
   
   /*
     Release USFSMAX_1 by setting the reset pin high (digitalWrite(USFSMAX_1_RESET_PIN, HIGH)) and configure as usual.
-	USFSMAX_0 will now respond at I2C address 0x6C and USFSMAX_1 will respond at the default I2C address, 0x57...
+    USFSMAX_0 will now respond at I2C address 0x6A and USFSMAX_1 will respond at the default I2C address, 0x57...
   */
 }
 
@@ -160,6 +160,14 @@ void change_I2C_slaveADDR(uint8_t new_addr)
   delay(100);
 }
 ```
+The same approach can be used to change the I2C slave address of a single USFSMAX module that interferes with any other sensor on the I2C bus.
+
+### USFSMAX Deep Sleep Mode and Wake-up
+The USFSMAX was also intended to support low-power operation for battery powered and wearable devices. The first step to achieving this goal is to develop a robust deep sleep mode that:
+* Reliably puts the sensors and coprocessor MCU into a "State preserving" suspended mode that only consumes a few microamperes from the power source
+  * By "State preserving" I mean that the the motion coprocessor can quickly resume operation without reboot/re-configuration
+  * This deep sleep mode can be accessed by an I2C command or a signal to a GPIO pin
+* Quickly returns to the "Running" state in response to a GPIO pin signal
 
 ## Example Host MCU Sketches
 This repository contains example host MCU Arduino sketches to demonstrate basic use of the USFSMAX motion coprocessor.
