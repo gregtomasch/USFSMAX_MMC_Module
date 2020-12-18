@@ -92,7 +92,7 @@ The default I2C slave address of the USFSMAX is 0x57. In some cases, it may be d
 #include "I2Cdev.h"
 #include "USFSMAX.h"
 
-#define NEW_I2C_SLAVE_ADDR                 0x6C                            // USFSMAX register for changing the I2C address is 0x6C (R/O)
+#define NEW_I2C_SLAVE_ADDR                 0x6C                            // USFSMAX register for changing the I2C address is 0x6C
 #define SENSOR_0_WIRE_INSTANCE             Wire
 #define I2C_CLOCK                          1000000                         // Run state I2C clock frequency = 1MHz
 #define MAX32660_0_SLV_ADDR                (0x57)                          // Default USFS MAX I2C slave address
@@ -139,7 +139,7 @@ void setup()
   
   // Set the USFSMAX_0 I2C slave address to the alternative
   change_I2C_slaveADDR(max32660_new_slv_addr);                             // USFSMAX_0 slave I2C address changed
-  SENSOR_0_WIRE_INSTANCE.setClock(I2C_CLOCK);                              // Set the I2C clock to high speed for run-mode data collection
+  SENSOR_0_WIRE_INSTANCE.setClock(I2C_CLOCK);                              // Set the I2C clock to high speed for run-mode
   delay(100);
   Serial.print("USFSMAX_0 I2C slave address updated...");
   Serial.println("");
