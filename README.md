@@ -15,15 +15,14 @@ I should mention here that the orientation of the USFSMAX module on the test obj
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102438031-6a0e4680-3fd0-11eb-9ebd-0b2a075cc67a.jpg)
 
+
+## USFSMAX Performance
 The [USFSMAX hardware](https://hackaday.io/project/160283-max32660-motion-co-processor/log/171113-final-hardware-design) is an excellent platform for enhanced sensor calibration and fusion algorithm development, as [discussed earlier](https://github.com/gregtomasch/USFSMAX). This variant of the USFSMAX product uses the [MMC5983 magnetometer](https://www.mouser.com/datasheet/2/821/Memsic_09102019_MMC5983MA_Datasheet_Rev_A-1635338.pdf). It is an [anisotropic magnetoresistance (AMR) sensor](https://www.allaboutcircuits.com/news/amr-current-sensor-roundup/) like the [ST Microelectronics LIS2MDL](https://www.st.com/resource/en/datasheet/lis2mdl.pdf) but with several key differences:
 * Dynamic range better-matched to measuring the geomagnetic field (+/-8G versus +/-50G)
 * Greatly improved resolution (18bit, 16G range versus 16bit, 100G range)
 * Much better noise level (0.4mG RMS versus 3mG RMS)
 * "Set and Reset" capability to remove offsets from high field exposure ([Similar to Honeywell AMR sensors](https://neurophysics.ucsd.edu/Manuals/Honeywell/HMC%201001%20and%20HMC%201002.pdf))
 
-
-
-## USFSMAX Performance
 Over the period of about two years, I have made a great deal of progress in terms of both the fusion and sensor calibration methods. These advances have been incorporated into the USFSMAX motion coprocessor hardware to provide results that are [significantly better than those from the Sentral](https://cdn.hackaday.io/images/7698711574962560703.jpg). ***Calibration and characterization of the first four prototype USFSMAX units showed [RMS heading error ranging between 0.25 and 0.35deg](https://hackaday.io/project/160283-max32660-motion-co-processor/log/172109-unit-to-unit-variation-and-on-board-residual-hard-iron-error-correction).*** 
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102422856-82746600-3fbc-11eb-81e3-9b4ca88f852d.jpg)
