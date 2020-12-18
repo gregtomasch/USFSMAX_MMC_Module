@@ -33,7 +33,7 @@ Although the sample size is small, we can clearly see the total amplitudes of th
 The behavior of the new USFSMAX module is quite similar to the original product but new features have been added and existing features have been refined. These include:
 * Dynamic hard iron correctors 
 * Gyroscope bias offset calibration
-* User-selectable USFSMAX I2C slave address selection
+* User-selectable USFSMAX I2C slave address
 * USFSMAX deep sleep mode and wake-up
 * Firmware ID byte
 
@@ -81,6 +81,85 @@ These constants are available from [online calculators](https://www.ngdc.noaa.go
   
 * Comment out all location definitions in the "Magnetic Constants" section of the "config.h" tab except for your own
 
+The DHI correction function is activated by defining "ENABLE_DHI_CORRECTOR" as "0x01". The 2-D corrector is selected by defining "USE_2D_DHI_CORRECTOR" as "0x01", otherwise the 3-D corrector is used instead. These definitions along with some simple instructions are located in the "BASIC SETUP" section in the "config.h" tab of the sketch.
+
+### Gyroscope Bias Offset Calibration
+The original version of the USFSMAX automatically performed gyroscope calibration at startup. The gyroscope biases need to be measured when the USFSMAX is truly at rest. Several users have pointed out that this isn't always the case at startup, depending on the test object/vehicle. Now the gyroscope calibration is done only in response to a command from the host MCU so that the calibration conditions can be guaranteed. All of the host MCU sketches in this repository show how to handle this in the host MCU startup sequence.
+
+### Changing the USFSMAX I2C Slave Address
+The default I2C slave address of the USFSMAX is 0x57. In some cases, it may be desirable to have more than one USFSMAX module on the same I2C bus. There can also be possible address conflicts with other I2C devices. Now the USFSMAX I2C address can be changed using the USFSMAX reset pin and an I2C command. The code snippet below shows how this is done:
+```
+#include "I2Cdev.h"
+#include "USFSMAX.h"
+
+#define NEW_I2C_SLAVE_ADDR                 0x6C                            // USFSMAX register for changing the I2C address is 0x6C (R/O)
+#define SENSOR_0_WIRE_INSTANCE             Wire
+#define I2C_CLOCK                          1000000                         // Run state I2C clock frequency = 1MHz
+#define MAX32660_0_SLV_ADDR                (0x57)                          // Default USFS MAX I2C slave address
+#define MAX32660_1_SLV_ADDR                (0x57)                          // Default USFS MAX I2C slave address
+#define ALT_MAX32660_SLV_ADDR              (0x6A)                          // Alternate USFS MAX I2C slave address
+#define USFSMAX_1_RESET_PIN                11                              // GPIO pin connected to the USFSMAX_1 module
+
+// Instantiate class objects
+I2Cdev  i2c_0(&SENSOR_0_WIRE_INSTANCE);
+USFSMAX USFSMAX_0(&i2c_0, 0);
+
+// Declare global scope variables
+uint8_t max32660_slv_addr     = MAX32660_SLV_ADDR;                         // Default I2C slave address
+uint8_t max32660_new_slv_addr = ALT_MAX32660_SLV_ADDR;                     // New I2C slave address
+
+// Declare global scope utility functions
+void change_I2C_slaveADDR(uint8_t new_addr)
+
+void setup()
+{
+  // Set up the reset pin and hold USFSMAX_1 in reset state
+  pinMode(USFSMAX_0_RESET_PIN, OUTPUT);
+  digitalWrite(USFSMAX_1_RESET_PIN, LOW);
+ 
+  // Open serial port
+  Serial.begin(115200);
+  delay(1000);
+ 
+  // Initialize the I2C bus
+  SENSOR_0_WIRE_INSTANCE.begin();
+  delay(100);
+  SENSOR_0_WIRE_INSTANCE.setClock(100000);                                 // Set I2C clock speed to 100kHz for configuration
+  delay(2000);
+ 
+  Serial.println("USFXMAX_1 holding in the reset state...");
+  delay(2000)
+  Serial.println("");
+  Serial.println("");
+ 
+  // Initialize USFSMAX_0 while USFSMAX_1 holds in the reset state
+  Serial.print("Initializing USFSMAX_0...");
+  Serial.println("");
+  USFSMAX_0.init_USFSMAX();                                                // Configure USFSMAX and sensors
+  
+  // Set the USFSMAX_0 I2C slave address to the alternative
+  change_I2C_slaveADDR(max32660_new_slv_addr);                             // USFSMAX_0 slave I2C address changed
+  SENSOR_0_WIRE_INSTANCE.setClock(I2C_CLOCK);                              // Set the I2C clock to high speed for run-mode data collection
+  delay(100);
+  Serial.print("USFSMAX_0 I2C slave address updated...");
+  Serial.println("");
+  
+  /*
+    Release USFSMAX_1 by setting the reset pin high (digitalWrite(USFSMAX_1_RESET_PIN, HIGH)) and configure as usual.
+	USFSMAX_0 will now respond at I2C address 0x6C and USFSMAX_1 will respond at the default I2C address, 0x57...
+  */
+}
+
+void loop()
+{
+}
+
+void change_I2C_slaveADDR(uint8_t new_addr)
+{
+  i2c_0.writeByte(max32660_slv_addr, NEW_I2C_SLAVE_ADDR, (new_addr<<1));
+  delay(100);
+}
+```
 
 ## Example Host MCU Sketches
 This repository contains example host MCU Arduino sketches to demonstrate basic use of the USFSMAX motion coprocessor.
@@ -101,17 +180,6 @@ This verson was tested using the [Tlera ESP32 development board](https://www.tin
 * "SCL_PIN" I2C clock GPIO
 
 The sketch configures the USFSMAX at startup and demonstrates the basic AHRS functions and sensor data acquisition according to the [USFSMAX register map](https://github.com/gregtomasch/USFSMAX/blob/master/USFSMAX_Reg_Map_0.0.pdf) included in this repository. The DHI corrector can be enabled/configured in the "config.h" tab of the sketch to evaluate its operation in 2-D and 3-D modes. The sketch's serial interface supports reset of the DHI corrector selected at startup.
-
-### Sensor Calibrations
-All bench calibrations of the accelerometers and magnetometers are stored in the USFSMAX's EEPROM and are not intended to be modified by the user at this time.
-
-The gyroscope biases are calculated at startup and are stored in the USFSMAX's EEPROM. The gyroscope bias calculation routine detects unwanted motion and resets the data buffers if the USFSMAX is bumped during gyroscope calibration. **However, it is a good idea to take care to not disturb the USFS during gyroscope calibration.** Gyroscope calibration can be selected from the sketch's serial interface at any time.
-
-The DHI correction function is activated by defining "ENABLE_DHI_CORRECTOR" as "0x01". The 2-D corrector is selected by defining "USE_2D_DHI_CORRECTOR" as "0x01", otherwise the 3-D corrector is used instead. These definitions along with some simple instructions are located in the "BASIC SETUP" section in the "config.h" tab of the sketch.
-
-If the 3-D DHI corrector is selected and active, data collection for a new hard iron correction estimate begins at startup. Tumble the USFSMAX (attached to the test object) randomly in 3-Space until the "Dynamic Hard Iron Correction Valid" field on the serial interface toggles from "0" to "128". The new value of the R-squared will be displayed as well.
-
-If the 2-D DHI corrector is selected and active, the basic procedure and serial interface response is similar. However, the USFSMAX and test object should be rotated in the horizontal plane (NOT in 3-D) for several revolutions until the corrector completes the hard iron correction estimate. The closer to level the pitch and roll attitude of the USFSMAX is held during 2-D rotation the better the hard iron correction estimate (and the larger R-squared) will be.
 
 ### I2C Data Transactions
 **The I2C slave address of the USFSMAX is currently set to 0x57.** There are plans to make the I2C slave address user-selectable and this feature should be available soon. An important aspect of the USFSMAX's I2C slave bus is that there is always a finite delay between when the host MCU requests to read data and when that data is available to be read. Consequently, the USFSMAX will work best with host MCU's that support [I2C clock stretching](https://www.i2c-bus.org/clock-stretching/).
