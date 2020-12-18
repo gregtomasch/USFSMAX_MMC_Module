@@ -11,7 +11,7 @@ Optimization efforts in these areas resulted in the USFSMAX module and carrier p
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102443217-0b9a9580-3fdb-11eb-9c88-19f36b8adc16.jpg)
 
-I should mention here that the orientation of the USFSMAX module on the test object or vehicle is important. The figure below shows a USFSMAX module and carrier assembly with the world coordinate system properly oriented. When installed on the test object/vehicle, the component side of the USFSMAX module should be facing up and the "X" axis should point in the dirrection of travel (forward).
+I should mention here that the orientation of the USFSMAX module on the test object or vehicle is important. The figure below shows a USFSMAX module and carrier assembly with the world coordinate system properly oriented. The USFSMAX conforms to the ["East-North-Up" (ENU)](https://en.wikipedia.org/wiki/Local_tangent_plane_coordinates) sensor coordination system convention. When installed on the test object/vehicle, the component side of the USFSMAX module should be facing up and the "Y" axis should point in the dirrection of travel (forward).
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102438031-6a0e4680-3fd0-11eb-9ebd-0b2a075cc67a.jpg)
 
