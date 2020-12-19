@@ -253,4 +253,5 @@ There is more to getting good results form the USFSMAX AHRS device than just con
 
 This all means thoughtful mechanical and electrical design of the test object/vehicle and careful placement of the USFSMAX module are key to achieving the best heading accuracy. This is a large and coplex subject, far beyond the scope of this document. However, I will conclude with a list of items to keep in mind whlie you are constructing project:
 * ***The orientation of the USFSMAX module on the test object is important.*** The module should be mounted so that the component side is facing up and the "Y" direction is forward. If the module is inverted, the 2D DHI corrector will generate very bad Z-axis offset estimates. This makes the indicated heading strongly dependent on tilt
-* Seperate the USFS from ferromagnetic materials and field-generating devics as much as possible; distance is you friend. Magnetic disturbances attenuate roughly as 1/(r<sup>2</sup>)...
+* Seperate the USFS from ferromagnetic materials and field-generating devics as much as possible; ***distance is you friend***. Magnetic disturbances attenuate roughly as 1/(r<sup>2</sup>)...
+* ***Wiring creates stray fields***. A wire carrying a current generates a magnetic field according to [Ampere's Law](https://courses.lumenlearning.com/boundless-physics/chapter/magnetism-and-magnetic-fields/).
