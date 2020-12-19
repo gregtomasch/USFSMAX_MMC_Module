@@ -36,4 +36,5 @@ The Sketch is built and uploaded using the [STM32L4 core for the Arduino IDE](ht
 * Build/Upload the sketch as you would with any other Arduino board
 * Once the upload is complete, power cycle the Dragonfly/USFSMAX by unplugging and replugging the USB cable
 * Open the Arduino serial monitor at 115200 baud. You should see some startup messages and then the calibration data scroll across the serial monitor
+* Send a "1" over the serial monitor; you will be prompted to go a gyro cal. Make sure the USFSMAX module is sitting still
 * Send a "1" over the serial monitor; you should see AHRS and sensor continuously scrolling across the serial monitor
