@@ -219,7 +219,7 @@ Almost all users have requested some means of tracking the firmware revision act
 This repository contains example host MCU Arduino sketches to demonstrate basic use of the USFSMAX MMC module.
 
 ### General Description
-These sketches configure the USFSMAX module at startup and demonstrate the basic AHRS functions and sensor data acquisition according to the [USFSMAX register map](https://github.com/gregtomasch/USFSMAX/blob/master/USFSMAX_Reg_Map_0.0.pdf) included in this repository. The DHI corrector can be enabled/configured in the "config.h" tab of the sketches to evaluate its operation in 2-D and 3-D modes. The serial interface supports:
+These sketches configure the USFSMAX module at startup and demonstrate the basic AHRS functions and sensor data acquisition according to the [USFSMAX register map](https://github.com/gregtomasch/USFSMAX_MMC_Module/commit/27947de856872a1cfd4835368217e8fa80fbd981) included in this repository. The DHI corrector can be enabled/configured in the "config.h" tab of the sketches to evaluate its operation in 2-D and 3-D modes. The serial interface supports:
 * Gyroscope bias offset calibration
 * Listing of the calibration data in the MAX32660's EEPROM
 * Reset of the selected DHI corrector any time during operation
