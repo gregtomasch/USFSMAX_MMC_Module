@@ -169,6 +169,46 @@ The USFSMAX was also intended to support low-power operation for battery powered
   * This deep sleep mode can be accessed by an I2C command or a signal to a GPIO pin
 * Quickly returns to the "Running" state in response to a GPIO pin signal
 
+After a great deal of development work, the USFSMAX now supports a deep sleep mode that meets these success criteria. The MMC5983-based module draws ~16mA running "Flat out" while it only draws ~10.5uA in the deep sleep mode. Deep sleep mode is entered by I2C command while waking is achieved by applying a positive-going pulse to the USFSMAX "Wake pin". Only the STM32L4 example host MCU sketch supports USFSMAX deep sleep and waking. This is appropriate because the STM32L4 is primarily intended for use in low power applications. The Teensy 3.x and ESP32 are not really meant for low power/wearable applications so I did not wade into implementing deep sleep and waking for these microcontrollers. The code snippet below is excerpted from the STM32L4 example in this repository. The "BOOT" button pin on the STM32L4 has a rising-edge interrupt attached to it and is used to wake the STM32L4.
+```
+void GoToSleep()
+{
+  detachInterrupt(INT_PIN);                                                           // Detach the DRDY interrupt to prevent waking the STM32L4
+  delay(10);
+  USFSMAX_0.GoToSleep();                                                              // Put the USFSMAX to sleep by writing 0x01 to register 0x6D
+  Serial.println("Going to sleep... Press the Dragonfly 'BOOT' button to wake.");
+  Serial.flush();                                                                     // Flush out anything left in the serial Tx buffer
+  USBDevice.detach();                                                                 // Detach the USB port
+  delay(1000);
+  data_ready[0] = 0;                                                                  // Set the DRDY flagto 0
+  awake = 0;                                                                                     
+  STM32.stop();                                                                       // Put the STM32L4 into deep sleep; pressing the "BOOT" button will wake it up
+  WakeUp();                                                                           // The STM32L4 has woken up. Now wake the USFSMAX...
+}
+
+void WakeUp()
+{
+  USBDevice.attach();                                                                 // Re-attach the USB port and re-open the serial port
+  Serial.begin(115200);
+  delay(100);
+  Serial.blockOnOverrun(false);
+  attachInterrupt(INT_PIN, DRDY_handler_0, RISING);                                   // Re-attach the DRDY interrupt
+  data_ready[0] = 0;                                                                  // Be sure the DRDY flag is 0
+  awake = 1;
+  digitalWrite(USFS_WAKE, HIGH);                                                       // Pulse USFSMAX wakeup pin high(1ms)
+  delay(1);
+  digitalWrite(USFS_WAKE, LOW);
+  while(1)                                                                             // USFS DRDY will give a +ve pulse when the USFSMAX is ready to resume
+  {
+    if(data_ready[0])
+    {
+      data_ready[0] = 0;
+      break;
+    }
+  }
+}
+```
+
 ## Example Host MCU Sketches
 This repository contains example host MCU Arduino sketches to demonstrate basic use of the USFSMAX motion coprocessor.
 
