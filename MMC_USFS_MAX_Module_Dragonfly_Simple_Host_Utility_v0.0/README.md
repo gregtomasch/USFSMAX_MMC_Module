@@ -1,24 +1,24 @@
 # USFSMAX Dragonfly Test Sketch
 
-This interconnect information is for operating the [USFSMAX motion coprocessor board](https://cdn.tindiemedia.com/images/resize/S4Os6lUdoJOFuyZHntYHBDiDCUk=/p/full-fit-in/1782x1336/i/44691/products/2020-02-03T20%3A51%3A19.878Z-USFSMAX.top.jpg) with the Tlera Dragonfly [STM32L476 development board](https://cdn.tindiemedia.com/images/resize/c3IuiwcFMGzoMgmNkZ_doDvJiuU=/p/full-fit-in/1782x1336/i/32456/products/2017-01-04T23%3A18%3A53.356Z-2016-05-14T16%2031%2059.360Z-Layout.jpg.855x570_q85_pad_rcrop.jpg). The default configuration of the sketch is set up to use the "Wire2" instance of the TWI I2C library and pin "A3" as the data ready (DRDY) interrupt. The necessary connections between the two boards are:
+This interconnect information is for operating the [USFSMAX motion coprocessor board](https://cdn.tindiemedia.com/images/resize/S4Os6lUdoJOFuyZHntYHBDiDCUk=/p/full-fit-in/1782x1336/i/44691/products/2020-02-03T20%3A51%3A19.878Z-USFSMAX.top.jpg) with the Tlera Dragonfly [STM32L476 development board](https://cdn.tindiemedia.com/images/resize/c3IuiwcFMGzoMgmNkZ_doDvJiuU=/p/full-fit-in/1782x1336/i/32456/products/2017-01-04T23%3A18%3A53.356Z-2016-05-14T16%2031%2059.360Z-Layout.jpg.855x570_q85_pad_rcrop.jpg). The default configuration of the sketch is set up to use the "Wire" instance of the TWI I2C library and pin "8" as the data ready (DRDY) interrupt. The necessary connections between the two boards are:
 
 ## Prototype Breadboard
 |USFSMAX Pin|Dragonfly Pin|
 |:---------:|:-----------:|
 |   3V3     |     3V3     |
 |   GND     |     GND     |
-|   SCL     |    3(SCL2)  |
-|   SDA     |    4(SDA2)  |
-|   INT     |      A3     |
+|   SCL     |    21(SCL)  |
+|   SDA     |    20(SDA)  |
+|   INT     |      8      |
 
 ## USFS "Piggybacked" onto Development Board
 |USFSMAX Pin|Dragonfly Pin|
 |:---------:|:-----------:|
-|   3V3     |      1      |
-|   GND     |      0      |
-|   SCL     |    3(SCL2)  |
-|   SDA     |    4(SDA2)  |
-|   INT     |      A3     |
+|   3V3     |      31     |
+|   GND     |      13     |
+|   SCL     |    21(SCL)  |
+|   SDA     |    20(SDA)  |
+|   INT     |      8      |
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102422567-eea29a00-3fbb-11eb-8a9e-fae31dcb2a69.JPG)
 
