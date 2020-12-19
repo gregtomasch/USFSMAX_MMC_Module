@@ -135,11 +135,11 @@ void setup()
   // Initialize USFSMAX_0 while USFSMAX_1 holds in the reset state
   Serial.print("Initializing USFSMAX_0...");
   Serial.println("");
-  USFSMAX_0.init_USFSMAX();                                                // Configure USFSMAX and sensors
+  USFSMAX_0.init_USFSMAX();                                          // Configure USFSMAX and sensors
   
   // Set the USFSMAX_0 I2C slave address to the alternative
-  change_I2C_slaveADDR(max32660_new_slv_addr);                             // USFSMAX_0 slave I2C address changed
-  SENSOR_0_WIRE_INSTANCE.setClock(I2C_CLOCK);                              // Set the I2C clock to high speed for run-mode
+  change_I2C_slaveADDR(max32660_new_slv_addr);                       // USFSMAX_0 slave I2C address changed
+  SENSOR_0_WIRE_INSTANCE.setClock(I2C_CLOCK);                        // Set the I2C clock to high speed for run-mode
   delay(100);
   Serial.print("USFSMAX_0 I2C slave address updated...");
   Serial.println("");
