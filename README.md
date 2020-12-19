@@ -184,7 +184,7 @@ void GoToSleep()
   delay(1000);
   data_ready[0] = 0;                                  // Set the DRDY flagto 0
   awake = 0;                                                                                     
-  STM32.stop();                                       // Put the STM32L4 into deep sleep; pressing the "BOOT" button will wake it up
+  STM32.stop();                                       // Put the STM32L4 into deep sleep; pressing the "BOOT" button will wake it
   WakeUp();                                           // The STM32L4 is awake now. Now wake up the USFSMAX...
 }
 
@@ -218,6 +218,18 @@ Almost all users have requested some means of tracking the firmware revision act
 ## Example Host MCU Sketches
 This repository contains example host MCU Arduino sketches to demonstrate basic use of the USFSMAX MMC module.
 
+### General Description
+These sketches configure the USFSMAX module at startup and demonstrate the basic AHRS functions and sensor data acquisition according to the [USFSMAX register map](https://github.com/gregtomasch/USFSMAX/blob/master/USFSMAX_Reg_Map_0.0.pdf) included in this repository. The DHI corrector can be enabled/configured in the "config.h" tab of the sketches to evaluate its operation in 2-D and 3-D modes. The serial interface supports:
+* Gyroscope bias offset calibration
+* Listing of the calibration data in the MAX32660's EEPROM
+* Reset of the selected DHI corrector any time during operation
+* Listing of the USFSMAX module's current configuration
+* The STM32L4 sketch variant supports activation of the deepsleep mode
+
+**The default I2C slave address of the USFSMAX module is 0x57h.** An important aspect of the USFSMAX's I2C slave bus is that there is always a finite delay between when the host MCU requests to read data and when that data is available to be read. Consequently, the USFSMAX will work best with host MCU's that support [I2C clock stretching](https://www.i2c-bus.org/clock-stretching/).
+
+It should be noted that the USFSMAX data registers are set up for efficient I2C data transfer by "Burst reading". That is, a starting data register is specified in the I2C transaction and additional data registers are read sequentially for the total number of bytes specified in the transaction. To improve overall I2C read request response time to the host MCU, not all data registers can be the starting register of an I2C read transaction. Data registers that are directly addressable at the beginning of a read transaction are highlighted in yellow in the register map. So, for example, if a user wanted to read just the two Y-axis gyroscope sensor data bytes from registers 0x07 and 0x08, that is not supported. Instead, the read transaction would begin at register 0x05 and be four bytes long to include the two Y-axis gyroscope data bytes desired.
+
 ### STM32L4
 This version is written for the [Tlera Dragonfly STM32L476 development board](https://www.tindie.com/products/tleracorp/dragonfly-stm32l47696-development-board/) using the [STM32L4 core for the Arduino IDE](https://github.com/GrumpyOldPizza/arduino-STM32L4). The USFSMAX breakout board can be connected to the MCU development board on a prototyping "Breadboard" or it can be "Piggybacked" using pin headers.
 
@@ -232,10 +244,3 @@ This verson was tested using the [Tlera ESP32 development board](https://www.tin
 * "USFS_VCC" "3V3" GPIO (Piggyback configuration)
 * "SDA_PIN" I2C data GPIO
 * "SCL_PIN" I2C clock GPIO
-
-The sketch configures the USFSMAX at startup and demonstrates the basic AHRS functions and sensor data acquisition according to the [USFSMAX register map](https://github.com/gregtomasch/USFSMAX/blob/master/USFSMAX_Reg_Map_0.0.pdf) included in this repository. The DHI corrector can be enabled/configured in the "config.h" tab of the sketch to evaluate its operation in 2-D and 3-D modes. The sketch's serial interface supports reset of the DHI corrector selected at startup.
-
-### I2C Data Transactions
-**The I2C slave address of the USFSMAX is currently set to 0x57.** There are plans to make the I2C slave address user-selectable and this feature should be available soon. An important aspect of the USFSMAX's I2C slave bus is that there is always a finite delay between when the host MCU requests to read data and when that data is available to be read. Consequently, the USFSMAX will work best with host MCU's that support [I2C clock stretching](https://www.i2c-bus.org/clock-stretching/).
-
-It should be noted that the USFSMAX data registers are set up for efficient I2C data transfer by "Burst reading". That is, a starting data register is specified in the I2C transaction and additional data registers are read sequentially for the total number of bytes specified in the transaction. To improve overall I2C read request response time to the host MCU, not all data registers can be the starting register of an I2C read transaction. Data registers that are directly addressable at the beginning of a read transaction are highlighted in yellow in the register map. So, for example, if a user wanted to read just the two Y-axis gyroscope sensor data bytes from registers 0x07 and 0x08, that is not supported. Instead, the read transaction would begin at register 0x05 and be four bytes long to include the two Y-axis gyroscope data bytes desired.
