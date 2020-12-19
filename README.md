@@ -244,3 +244,11 @@ This verson was tested using the [Tlera ESP32 development board](https://www.tin
 * "USFS_VCC" "3V3" GPIO (Piggyback configuration)
 * "SDA_PIN" I2C data GPIO
 * "SCL_PIN" I2C clock GPIO
+
+## Getting the Best Performance From Your USFSMAX MMC Module
+There is more to getting good results form the USFSMAX AHRS device than just connecting it to the MCU properly and downloading an Arduino sketch. As we work reach ever lower levels of heading estimation error, the details of how the USFSMAX is deployed and even small imperfections in the local magnetic environment become important. There are several fundamental concepts to keep in mind when deciding how to integrate the USFSMAX unit into your project:
+1. Remember that "Hard iron" interference is caused by a steady magnetic field that is ***static*** with respect to the sensor (body) frame of reference. This is the only kind of magnetic interferennce that can be eliminated by the DHI corrector
+2. "Soft iron" interference is caused by the magnetometer sensor being too close to ***magnetizable*** material that does not hold any significant ***residual magnetization***, like mild steel for instance (hence the term "Soft iron"). Soft iron interference has the effect of distorting the magnetometer sensor response surface. There is no pracitical method for correcting soft iron interference induced by the test object/vehicle
+3. ***Usually, the best method of dealing with either kind of magnetic interference is to seperate the USFSMAX module from the source of the interference***
+
+This means careful design
