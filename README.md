@@ -92,21 +92,21 @@ The default I2C slave address of the USFSMAX is 0x57. In some cases, it may be d
 #include "I2Cdev.h"
 #include "USFSMAX.h"
 
-#define NEW_I2C_SLAVE_ADDR                 0x6C                            // USFSMAX register for changing the I2C address is 0x6C
+#define NEW_I2C_SLAVE_ADDR                 0x6C                      // USFSMAX register for changing the I2C address is 0x6C
 #define SENSOR_0_WIRE_INSTANCE             Wire
-#define I2C_CLOCK                          1000000                         // Run state I2C clock frequency = 1MHz
-#define MAX32660_0_SLV_ADDR                (0x57)                          // Default USFS MAX I2C slave address
-#define MAX32660_1_SLV_ADDR                (0x57)                          // Default USFS MAX I2C slave address
-#define ALT_MAX32660_SLV_ADDR              (0x6A)                          // Alternate USFS MAX I2C slave address
-#define USFSMAX_1_RESET_PIN                11                              // GPIO pin connected to the USFSMAX_1 module
+#define I2C_CLOCK                          1000000                   // Run state I2C clock frequency = 1MHz
+#define MAX32660_0_SLV_ADDR                (0x57)                    // Default USFS MAX I2C slave address
+#define MAX32660_1_SLV_ADDR                (0x57)                    // Default USFS MAX I2C slave address
+#define ALT_MAX32660_SLV_ADDR              (0x6A)                    // Alternate USFS MAX I2C slave address
+#define USFSMAX_1_RESET_PIN                11                        // GPIO pin connected to the USFSMAX_1 module
 
 // Instantiate class objects
 I2Cdev  i2c_0(&SENSOR_0_WIRE_INSTANCE);
 USFSMAX USFSMAX_0(&i2c_0, 0);
 
 // Declare global scope variables
-uint8_t max32660_slv_addr     = MAX32660_SLV_ADDR;                         // Default I2C slave address
-uint8_t max32660_new_slv_addr = ALT_MAX32660_SLV_ADDR;                     // New I2C slave address
+uint8_t max32660_slv_addr     = MAX32660_SLV_ADDR;                   // Default I2C slave address
+uint8_t max32660_new_slv_addr = ALT_MAX32660_SLV_ADDR;               // New I2C slave address
 
 // Declare global scope utility functions
 void change_I2C_slaveADDR(uint8_t new_addr)
@@ -124,7 +124,7 @@ void setup()
   // Initialize the I2C bus
   SENSOR_0_WIRE_INSTANCE.begin();
   delay(100);
-  SENSOR_0_WIRE_INSTANCE.setClock(100000);                                 // Set I2C clock speed to 100kHz for configuration
+  SENSOR_0_WIRE_INSTANCE.setClock(100000);                           // Set I2C clock speed to 100kHz for configuration
   delay(2000);
  
   Serial.println("USFXMAX_1 holding in the reset state...");
@@ -175,33 +175,33 @@ Only the STM32L4 example host MCU sketch in this repository that supports USFSMA
 ```
 void GoToSleep()
 {
-  detachInterrupt(INT_PIN);                           // Detach the DRDY interrupt to prevent spurious waking the STM32L4
+  detachInterrupt(INT_PIN);                         // Detach the DRDY interrupt
   delay(10);
-  USFSMAX_0.GoToSleep();                              // Put the USFSMAX to sleep by writing 0x01 to register 0x6D
+  USFSMAX_0.GoToSleep();                            // Put the USFSMAX to sleep by writing 0x01 to register 0x6D
   Serial.println("Going to sleep... ");
-  Serial.flush();                                     // Flush out anything left in the serial Tx buffer
-  USBDevice.detach();                                 // Detach the USB port
+  Serial.flush();                                   // Flush out anything left in the serial Tx buffer
+  USBDevice.detach();                               // Detach the USB port
   delay(1000);
-  data_ready[0] = 0;                                  // Set the DRDY flagto 0
+  data_ready[0] = 0;                                // Set the DRDY flagto 0
   awake = 0;                                                                                     
-  STM32.stop();                                       // Put the STM32L4 into deep sleep; pressing the "BOOT" button will wake it
-  WakeUp();                                           // The STM32L4 is awake now. Now wake up the USFSMAX...
+  STM32.stop();                                     // Put the STM32L4 into deep sleep; the "BOOT" button will wake
+  WakeUp();                                         // The STM32L4 is awake. Now wake up the USFSMAX...
 }
 
 void WakeUp()
 {
-  USBDevice.attach();                                 // Re-attach the USB port and re-open the serial port
+  USBDevice.attach();                               // Re-attach the USB port and re-open the serial port
   Serial.begin(115200);
   delay(100);
   Serial.blockOnOverrun(false);
-  attachInterrupt(INT_PIN, DRDY_handler_0, RISING);   // Re-attach the DRDY interrupt
-  data_ready[0] = 0;                                  // Be sure the DRDY flag is 0
+  attachInterrupt(INT_PIN, DRDY_handler_0, RISING); // Re-attach the DRDY interrupt
+  data_ready[0] = 0;                                // Be sure the DRDY flag is 0
   awake = 1;
-  digitalWrite(USFS_WAKE, HIGH);                      // Pulse USFSMAX wakeup pin high(1ms)
+  digitalWrite(USFS_WAKE, HIGH);                    // Pulse USFSMAX wakeup pin high(1ms)
   delay(1);
   digitalWrite(USFS_WAKE, LOW);
   // Wait for the USFSMAX to respond
-  while(1)                                            // USFS DRDY will give a DRDY interrupt when the USFSMAX is ready to resume
+  while(1)                                          // The USFSMAX will give a DRDY interrupt when it is ready to resume
   {
     if(data_ready[0])
     {
@@ -251,4 +251,4 @@ There is more to getting good results form the USFSMAX AHRS device than just con
 2. "Soft iron" interference is caused by the magnetometer sensor being too close to ***magnetizable*** material that does not hold any significant ***residual magnetization***, like mild steel for instance (hence the term "Soft iron"). Soft iron interference has the effect of distorting the magnetometer sensor response surface. There is no pracitical method for correcting soft iron interference induced by the test object/vehicle
 3. ***Usually, the best method of dealing with either kind of magnetic interference is to seperate the USFSMAX module from the source of the interference***
 
-This means careful design
+This all means thoughtful mechanical and electrical design of the test object/vehicle and careful placement of the USFSMAX module are key to achieving the best heading accuracy.
