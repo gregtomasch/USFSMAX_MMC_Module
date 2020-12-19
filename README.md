@@ -163,17 +163,19 @@ void change_I2C_slaveADDR(uint8_t new_addr)
 The same approach can be used to change the I2C slave address of a single USFSMAX module that interferes with any other sensor on the I2C bus.
 
 ### USFSMAX Deep Sleep Mode and Wake-up
-The USFSMAX was also intended to support low-power operation for battery powered and wearable devices. The first step to achieving this goal is to develop a robust deep sleep mode that:
+The USFSMAX is also intended to support low-power operation for battery powered and wearable devices. The first step to achieving this goal is to develop a robust deep sleep mode that:
 * Reliably puts the sensors and coprocessor MCU into a "State preserving" suspended mode that only consumes a few microamperes from the power source
   * By "State preserving" I mean that the the motion coprocessor can quickly resume operation without reboot/re-configuration
   * This deep sleep mode can be accessed by an I2C command or a signal to a GPIO pin
 * Quickly returns to the "Running" state in response to a GPIO pin signal
 
-After a great deal of development work, the USFSMAX now supports a deep sleep mode that meets these success criteria. The MMC5983-based module draws ~16mA running "Flat out" while it only draws ~10.5uA in the deep sleep mode. Deep sleep mode is entered by I2C command while waking is achieved by applying a positive-going pulse to the USFSMAX "Wake pin". Only the STM32L4 example host MCU sketch supports USFSMAX deep sleep and waking. This is appropriate because the STM32L4 is primarily intended for use in low power applications. The Teensy 3.x and ESP32 are not really meant for low power/wearable applications so I did not wade into implementing deep sleep and waking for these microcontrollers. The code snippet below is excerpted from the STM32L4 example in this repository. The "BOOT" button pin on the STM32L4 has a rising-edge interrupt attached to it and is used to wake the STM32L4.
+After a great deal of development work, the USFSMAX now supports a deep sleep mode that meets these success criteria. The MMC5983-based module draws ~16mA running "Flat out" while it only draws ~10.5uA in the deep sleep mode. Deep sleep mode is entered by I2C command while waking is achieved by applying a positive-going pulse to the USFSMAX "Wake pin". An I2C cannot be used for waking because the MAX32660 chip only supports waking from deep sleep by internal RTC or external GPIO interrupts.
+
+Only the STM32L4 example host MCU sketch in this repository that supports USFSMAX deep sleep and waking. This is appropriate as the STM32L4 is primarily intended for use in low power applications. The Teensy 3.x and ESP32 are not really meant for low power/wearable applications so I did not wade into implementing deep sleep and waking for these microcontrollers. However, the same same methods apply for any host MCU. The code snippet below is excerpted from the STM32L4 example in this repository and describes the sleep amd wake functions. The "BOOT" button pin on the STM32L4 has a rising-edge interrupt attached to it and is used to wake the STM32L4.
 ```
 void GoToSleep()
 {
-  detachInterrupt(INT_PIN);                           // Detach the DRDY interrupt to prevent waking the STM32L4
+  detachInterrupt(INT_PIN);                           // Detach the DRDY interrupt to prevent spurious waking the STM32L4
   delay(10);
   USFSMAX_0.GoToSleep();                              // Put the USFSMAX to sleep by writing 0x01 to register 0x6D
   Serial.println("Going to sleep... ");
@@ -183,7 +185,7 @@ void GoToSleep()
   data_ready[0] = 0;                                  // Set the DRDY flagto 0
   awake = 0;                                                                                     
   STM32.stop();                                       // Put the STM32L4 into deep sleep; pressing the "BOOT" button will wake it up
-  WakeUp();                                           // The STM32L4 has woken up. Now wake the USFSMAX...
+  WakeUp();                                           // The STM32L4 is awake now. Now wake up the USFSMAX...
 }
 
 void WakeUp()
@@ -198,7 +200,8 @@ void WakeUp()
   digitalWrite(USFS_WAKE, HIGH);                      // Pulse USFSMAX wakeup pin high(1ms)
   delay(1);
   digitalWrite(USFS_WAKE, LOW);
-  while(1)                                            // USFS DRDY will give a +ve pulse when the USFSMAX is ready to resume
+  // Wait for the USFSMAX to respond
+  while(1)                                            // USFS DRDY will give a DRDY interrupt when the USFSMAX is ready to resume
   {
     if(data_ready[0])
     {
@@ -209,8 +212,11 @@ void WakeUp()
 }
 ```
 
+### USFSMAX Firmware ID Byte
+Almost all users have requested some means of tracking the firmware revision active in their USFSMAX units be supported. Of course this is more than reasonable. Read-only register 0x7F has been added to the I2C register map. Reading this register will return a firmware identification byte. We are introducing the USFSMAX MMC module with firmware ID 0x03h.
+
 ## Example Host MCU Sketches
-This repository contains example host MCU Arduino sketches to demonstrate basic use of the USFSMAX motion coprocessor.
+This repository contains example host MCU Arduino sketches to demonstrate basic use of the USFSMAX MMC module.
 
 ### STM32L4
 This version is written for the [Tlera Dragonfly STM32L476 development board](https://www.tindie.com/products/tleracorp/dragonfly-stm32l47696-development-board/) using the [STM32L4 core for the Arduino IDE](https://github.com/GrumpyOldPizza/arduino-STM32L4). The USFSMAX breakout board can be connected to the MCU development board on a prototyping "Breadboard" or it can be "Piggybacked" using pin headers.
