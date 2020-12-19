@@ -10,6 +10,7 @@ This interconnect information is for operating the [USFSMAX motion coprocessor b
 |   SCL     |    21(SCL)  |
 |   SDA     |    20(SDA)  |
 |   INT     |      8      |
+|   Wake    |      30     |
 
 ## USFS "Piggybacked" onto Development Board
 |USFSMAX Pin|Dragonfly Pin|
@@ -19,6 +20,7 @@ This interconnect information is for operating the [USFSMAX motion coprocessor b
 |   SCL     |    21(SCL)  |
 |   SDA     |    20(SDA)  |
 |   INT     |      8      |
+|   Wake    |      30     |
 
 ![alt text](https://user-images.githubusercontent.com/5760946/102422567-eea29a00-3fbb-11eb-8a9e-fae31dcb2a69.JPG)
 
