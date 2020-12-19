@@ -171,7 +171,7 @@ The USFSMAX is also intended to support low-power operation for battery powered 
 
 After a great deal of development work, the USFSMAX now supports a deep sleep mode that meets these success criteria. The MMC5983-based module draws ~16mA running "Flat out" while it only draws ~10.5uA in the deep sleep mode. Deep sleep mode is entered by I2C command while waking is achieved by applying a positive-going pulse to the USFSMAX "Wake pin". An I2C cannot be used for waking because the MAX32660 chip only supports waking from deep sleep by internal RTC or external GPIO interrupts.
 
-Only the STM32L4 example host MCU sketch in this repository that supports USFSMAX deep sleep and waking. This is appropriate as the STM32L4 is primarily intended for use in low power applications. The Teensy 3.x and ESP32 are not really meant for low power/wearable applications so I did not wade into implementing deep sleep and waking for these microcontrollers. However, the same same methods apply for any host MCU. The code snippet below is excerpted from the STM32L4 example in this repository and describes the sleep amd wake functions. The "BOOT" button pin on the STM32L4 has a rising-edge interrupt attached to it and is used to wake the STM32L4.
+Only the STM32L4 example host MCU sketch in this repository that supports USFSMAX deep sleep and waking. This is appropriate as the STM32L4 is primarily intended for use in low power applications. The Teensy 3.x and ESP32 are not really meant for low power/wearable applications so I did not wade into implementing deep sleep and waking for these microcontrollers. However, the same methods apply for any host MCU. The code snippet below is excerpted from the STM32L4 example in this repository and describes the sleep and wake functions. The "BOOT" button pin on the STM32L4 has a rising-edge interrupt attached to it and is used to wake the STM32L4.
 ```
 void GoToSleep()
 {
@@ -213,7 +213,7 @@ void WakeUp()
 ```
 
 ### USFSMAX Firmware ID Byte
-Almost all users have requested some means of tracking the firmware revision active in their USFSMAX. Of course this is more than reasonable. Read-only register 0x7F has been added to the I2C register map. Reading this register will return a firmware identification byte. We are introducing the USFSMAX MMC module with firmware ID 0x03h. All of the sketches in this repository demonstrate reading of the firmware ID byte and print it to the serial monitor at startup.
+Almost all users have requested some means of tracking the firmware revision active in their USFSMAX. Of course, this is more than reasonable. Read-only register 0x7F has been added to the I2C register map. Reading this register will return a firmware identification byte. We are introducing the USFSMAX MMC module with firmware ID 0x03h. All the sketches in this repository demonstrate reading of the firmware ID byte and print it to the serial monitor at startup.
 
 ## Example Host MCU Sketches
 This repository contains example host MCU Arduino sketches to demonstrate basic use of the USFSMAX MMC module.
