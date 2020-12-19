@@ -213,7 +213,7 @@ void WakeUp()
 ```
 
 ### USFSMAX Firmware ID Byte
-Almost all users have requested some means of tracking the firmware revision active in their USFSMAX units be supported. Of course this is more than reasonable. Read-only register 0x7F has been added to the I2C register map. Reading this register will return a firmware identification byte. We are introducing the USFSMAX MMC module with firmware ID 0x03h.
+Almost all users have requested some means of tracking the firmware revision active in their USFSMAX. Of course this is more than reasonable. Read-only register 0x7F has been added to the I2C register map. Reading this register will return a firmware identification byte. We are introducing the USFSMAX MMC module with firmware ID 0x03h. All of the sketches in this repository demonstrate reading of the firmware ID byte and print it to the serial monitor at startup.
 
 ## Example Host MCU Sketches
 This repository contains example host MCU Arduino sketches to demonstrate basic use of the USFSMAX MMC module.
