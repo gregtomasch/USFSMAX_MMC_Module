@@ -1,7 +1,7 @@
 # USFSMAX MMC5983 Motion Coprocessor Module
 
 ## Introduction
-This repository provides background information and practical code examples for implementing Tlera Corporation's follow-on product to the [USFSMAX motion coprocessor](https://www.tindie.com/products/onehorse/max32660-motion-co-processor/), the [USFSMAX module and carrier](https://www.tindie.com/products/onehorse/usfsmax-module-and-carrier/). After introducing the USFSMAX into the marketplace, we identified several areas for improvement over the original design:
+This repository provides background information and practical code examples for implementing Tlera Corporation's follow-on product to the [USFSMAX motion coprocessor](https://www.tindie.com/products/onehorse/max32660-motion-co-processor/), the [USFSMAX MMC5983 module and carrier](https://www.tindie.com/products/onehorse/usfsmax-module-and-carrier/). After introducing the USFSMAX into the marketplace, we identified several areas for improvement over the original design:
 * The validity of the bench calibration can degrade from board-level strain impacting the response characteristics of the individual sensors
 * This is typically encountered when making solder connections to the plated through-holes on the USFSMAX breakout PCB
 * The LIS2MDL magnetometer is sufficiently noisy to cause the indicated heading to fluctuate +/- ~0.2deg. Perhaps there is a btter magnetometer available?
