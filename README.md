@@ -40,6 +40,7 @@ The behavior of the new USFSMAX module is similar to the original product but ne
 The following sections will present relevant information for each of these general areas.
 
 ### Dynamic Hard Iron (DHI) Correctors
+***Note: DO NOT enable the DHI until you are ready to train the corrector under the method and controlled conditions described below. Enabling the DHI without following the proper training procedure can result in unstable output data rates and erroneous heading results.***
 The DHI correctors are quite similar to those of the original USFSMAX product but are deployed slightly differently after receiving valuable user input. ***Please read this section carefully to avoid unanticipated behavior from the USFSMAX module.***
 1. The DHI corrector can be enabled or disabled at startup by user command from the host MCU. For the test sketches in this repository, this is handled by definitions in the "config.h" tab
 2. If the DHI corrector is enabled and there is a valid DHI correction in the USFSMAX's EEPROM, it is loaded at startup and it becomes active
