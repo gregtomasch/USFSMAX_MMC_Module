@@ -45,7 +45,7 @@ The DHI correctors are quite similar to those of the original USFSMAX product bu
 1. The DHI corrector can be enabled or disabled at startup by user command from the host MCU. For the test sketches in this repository, this is handled by definitions in the "config.h" tab
 2. If the DHI corrector is enabled and there is a valid DHI correction in the USFSMAX's EEPROM, it is loaded at startup and it becomes active
 3. The DHI corrector collects new training data at startup *only* if the DHI corrector is enabled and there is no valid calibration in the EEPROM. If the 3D corrector is active, this feature can give a "better than nothing" hard iron offset estimate but the result will probably be sub-optimal. If the 2D corrector is active, the training algorithm will probably not converge unless the motion is constrained to the X-Y plane
-4. The recommended method for training the DHI corrector is to reset it from the host MCU and purposefully manipulate the test object/vehicle to provide optimal training conditions
+4. The ***necessary*** method for training the DHI corrector is to reset it from the host MCU and purposefully manipulate the test object/vehicle to provide optimal training conditions
 5. Once the training process is complete, the new DHI correction estimate is automatically stored in the USFSMAX's EEPROM
 6. When the new hard iron correction estimate is complete, a quality figure-of-merit for the estimate becomes available as well. The user can then choose to let the new estimate stand or reset the corrector and try again
 7. The quality figure-of-merit ***is not*** stored in the EEPROM
