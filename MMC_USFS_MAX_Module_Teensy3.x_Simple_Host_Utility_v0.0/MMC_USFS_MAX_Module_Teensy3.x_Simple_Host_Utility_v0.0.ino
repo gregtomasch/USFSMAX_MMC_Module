@@ -187,7 +187,7 @@ void loop()
 
       // Euler angles
       Serial.print("USFSMAX Yaw, Pitch, Roll: ");
-      Serial.print(heading[0], 2); Serial.print(", "); Serial.print(angle[0][1], 2); Serial.print(", "); Serial.println(angle[0][0], 2);
+      Serial.print(heading[0], 2); Serial.print(", "); Serial.print(angle[0][0], 2); Serial.print(", "); Serial.println(angle[0][1], 2);
 
       // Critical time deltas
       //Serial.println(""); Serial.print("Loop CT:"); Serial.print(cycleTime); Serial.println(" us");
@@ -197,7 +197,7 @@ void loop()
     // Spreadsheet output when "SERIAL_DEBUG" and "MOTION_CAL_GUI_ENABLED" are not defined in config.h
     #if !defined(SERIAL_DEBUG)  && !defined(MOTION_CAL_GUI_ENABLED)
       Serial.print(TimeStamp, 2);   Serial.print(","); Serial.print(heading[0], 2);  Serial.print(",");
-      Serial.print(angle[0][1], 2); Serial.print(","); Serial.print(angle[0][0], 2); Serial.print(",");
+      Serial.print(angle[0][0], 2); Serial.print(","); Serial.print(angle[0][1], 2); Serial.print(",");
       Serial.print(cal_status[0]);  Serial.println("");
     #endif
 

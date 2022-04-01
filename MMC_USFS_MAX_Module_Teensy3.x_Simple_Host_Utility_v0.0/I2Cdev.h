@@ -32,7 +32,8 @@
 #include "def.h"
 #include <i2c_t3.h>
 
-class I2Cdev {
+class I2Cdev
+{
     public:
                                         I2Cdev(i2c_t3*);
          uint8_t                        readByte(uint8_t address, uint8_t subAddress);

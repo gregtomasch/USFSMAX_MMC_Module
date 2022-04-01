@@ -49,23 +49,30 @@ void IMU::computeIMU()
   static float buff_roll[2] = {0.0f, 0.0f}, buff_pitch[2] = {0.0f, 0.0f}, buff_heading[2] = {0.0f, 0.0f};
 
   Begin = micros();
-  _usfsmax->getQUAT_Lin();
-  Acq_time += micros() - Begin;
+  if(!EulerQuatFlag)
+  {
+    _usfsmax->getQUAT_Lin();
+    Acq_time += micros() - Begin;
 
-  // MAXUSFS Quaternion is ENU
-  buff_heading[_sensornum] = atan2f(2.0f*(qt[_sensornum][1]*qt[_sensornum][2] - qt[_sensornum][0]*qt[_sensornum][3]), qt[_sensornum][0]*qt[_sensornum][0] -
-                                    qt[_sensornum][1]*qt[_sensornum][1] + qt[_sensornum][2]*qt[_sensornum][2] - qt[_sensornum][3]*qt[_sensornum][3]);
-  buff_pitch[_sensornum]   = asinf(2.0f*(qt[_sensornum][2]*qt[_sensornum][3] + qt[_sensornum][0]*qt[_sensornum][1]));
-  buff_roll[_sensornum]    = atan2f(2.0f*(qt[_sensornum][0]*qt[_sensornum][2] - qt[_sensornum][1]*qt[_sensornum][3]), qt[_sensornum][0]*qt[_sensornum][0] -
-                                    qt[_sensornum][1]*qt[_sensornum][1] - qt[_sensornum][2]*qt[_sensornum][2] + qt[_sensornum][3]*qt[_sensornum][3]);
-  buff_heading[_sensornum] *= 57.2957795f;
-  buff_pitch[_sensornum]   *= 57.2957795f;
-  buff_roll[_sensornum]    *= 57.2957795f;
-  angle[_sensornum][0]     = buff_roll[_sensornum];
-  angle[_sensornum][1]     = buff_pitch[_sensornum];
-  yaw[_sensornum]          = buff_heading[_sensornum];
-  heading[_sensornum]      = yaw[_sensornum];                                                                                                                    // Mag declination added in USFSMAX
-  if(heading[_sensornum] < 0.0f) heading[_sensornum] += 360.0f;                                                                                                  // Convert heading to 0 - 360deg range
+    // MAXUSFS Quaternion is ENU
+    buff_heading[_sensornum] = atan2f(2.0f*(qt[_sensornum][1]*qt[_sensornum][2] - qt[_sensornum][0]*qt[_sensornum][3]), qt[_sensornum][0]*qt[_sensornum][0] -
+                                      qt[_sensornum][1]*qt[_sensornum][1] + qt[_sensornum][2]*qt[_sensornum][2] - qt[_sensornum][3]*qt[_sensornum][3]);
+    buff_pitch[_sensornum]   = asinf(2.0f*(qt[_sensornum][2]*qt[_sensornum][3] + qt[_sensornum][0]*qt[_sensornum][1]));
+    buff_roll[_sensornum]    = atan2f(2.0f*(qt[_sensornum][0]*qt[_sensornum][2] - qt[_sensornum][1]*qt[_sensornum][3]), qt[_sensornum][0]*qt[_sensornum][0] -
+                                      qt[_sensornum][1]*qt[_sensornum][1] - qt[_sensornum][2]*qt[_sensornum][2] + qt[_sensornum][3]*qt[_sensornum][3]);
+    buff_heading[_sensornum] *= 57.2957795f;
+    buff_pitch[_sensornum]   *= 57.2957795f;
+    buff_roll[_sensornum]    *= 57.2957795f;
+    angle[_sensornum][1]     = buff_roll[_sensornum];
+    angle[_sensornum][0]     = buff_pitch[_sensornum];
+    yaw[_sensornum]          = buff_heading[_sensornum];
+    heading[_sensornum]      = yaw[_sensornum];                                                                                                                  // Mag declination added in USFSMAX
+    if(heading[_sensornum] < 0.0f) heading[_sensornum] += 360.0f;                                                                                                // Convert heading to 0 - 360deg range
+  } else
+  {
+    _usfsmax->getEULER();
+    Acq_time += micros() - Begin;
+  }
   TimeStamp               = ((float)micros() - (float)Start_time)/1000000.0f;
 }
 
@@ -123,8 +130,8 @@ void IMU::compute_Alternate_IMU()
   #endif
   HEADING[_sensornum]  = -atan2f(QT[_sensornum][0]*QT[_sensornum][0] - QT[_sensornum][1]*QT[_sensornum][1] + QT[_sensornum][2]*QT[_sensornum][2] -
                                  QT[_sensornum][3]*QT[_sensornum][3], 2.0f*(QT[_sensornum][1]*QT[_sensornum][2] - QT[_sensornum][0]*QT[_sensornum][3]));   
-  ANGLE[_sensornum][1] = asinf(2.0f*(QT[_sensornum][2]*QT[_sensornum][3] + QT[_sensornum][0]*QT[_sensornum][1]));
-  ANGLE[_sensornum][0] = atan2f(2.0f*(QT[_sensornum][0]*QT[_sensornum][2] - QT[_sensornum][1]*QT[_sensornum][3]), QT[_sensornum][0]*QT[_sensornum][0] -
+  ANGLE[_sensornum][0] = asinf(2.0f*(QT[_sensornum][2]*QT[_sensornum][3] + QT[_sensornum][0]*QT[_sensornum][1]));
+  ANGLE[_sensornum][1] = atan2f(2.0f*(QT[_sensornum][0]*QT[_sensornum][2] - QT[_sensornum][1]*QT[_sensornum][3]), QT[_sensornum][0]*QT[_sensornum][0] -
                                 QT[_sensornum][1]*QT[_sensornum][1] - QT[_sensornum][2]*QT[_sensornum][2] + QT[_sensornum][3]*QT[_sensornum][3]);
   ANGLE[_sensornum][0] *= 57.2957795f;
   ANGLE[_sensornum][1] *= 57.2957795f;

@@ -40,6 +40,7 @@
 #define HEADING_KALMAN_R                15.0f                                                                                                            // Kalman Sensor variance
 #define HEADING_KALMAN_Q                0.0030f                                                                                                          // Kalman Process variance; initial baseline = 0.003
 
+extern uint8_t                          EulerQuatFlag;
 extern uint32_t                         Start_time;
 extern float                            TimeStamp;
 extern uint32_t                         Begin;

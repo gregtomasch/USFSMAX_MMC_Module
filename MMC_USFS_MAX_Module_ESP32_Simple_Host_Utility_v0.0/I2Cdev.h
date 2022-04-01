@@ -32,7 +32,8 @@
 #include "def.h"
 #include <Wire.h>
 
-class I2Cdev {
+class I2Cdev
+{
     public:
                                         I2Cdev(TwoWire*);
          uint8_t                        readByte(uint8_t address, uint8_t subAddress);

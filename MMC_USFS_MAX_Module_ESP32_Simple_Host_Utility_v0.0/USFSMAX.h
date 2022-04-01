@@ -169,6 +169,8 @@ extern int16_t                        gyroADC[2][3];
 extern int16_t                        accADC[2][3];
 extern int16_t                        magADC[2][3];
 extern float                          Mx[2], My[2];
+extern float                          angle[2][2];
+extern float                          heading[2];
 extern float                          UT_per_Count;
 extern float                          qt[2][4];
 extern int16_t                        accLIN[2][3];
@@ -190,6 +192,7 @@ class USFSMAX
      void                             MAG_getADC();
      void                             GetMxMy();
      void                             getQUAT();
+     void                             getEULER();
      void                             LIN_ACC_getADC();
      void                             getQUAT_Lin();
      void                             BARO_getADC();

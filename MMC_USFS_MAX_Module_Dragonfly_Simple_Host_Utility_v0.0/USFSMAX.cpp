@@ -354,6 +354,16 @@ void USFSMAX::getQUAT()
   qt[_sensornum][3] = uint32_reg_to_float (&bytes[12]);
 }
 
+void USFSMAX::getEULER()
+{
+  uint8_t bytes[12];
+
+  _i2c->readBytes(MAX32660_SLV_ADDR, YAW_BYTE0, 12, bytes);
+  heading[_sensornum]  = uint32_reg_to_float (&bytes[0]);
+  angle[_sensornum][0] = uint32_reg_to_float (&bytes[4]);
+  angle[_sensornum][1] = uint32_reg_to_float (&bytes[8]);
+}
+
 void USFSMAX::getQUAT_Lin()
 {
   uint8_t bytes[28];
